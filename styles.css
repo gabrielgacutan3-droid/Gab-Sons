@@ -433,6 +433,7 @@ a { color: inherit; }
   letter-spacing: 0.18em; text-transform: uppercase;
   opacity: 0.85;
 }
+.sq-domain { font-size: 0.8rem; font-weight: 600; color: rgba(255, 255, 255, 0.7); margin-bottom: 14px; }
 .sq-desc { font-size: 0.97rem; line-height: 1.55; color: rgba(255, 255, 255, 0.92); padding-bottom: 72px; }
 .sq-cta {
   position: absolute; left: 16px; right: 16px; bottom: 16px; z-index: 3;
