@@ -208,8 +208,9 @@ a { color: inherit; }
   font-size: clamp(1.05rem, 1.5vw, 1.2rem);
   color: var(--ink-soft);
   max-width: 34em;
-  margin: 26px auto 36px;
+  margin: 26px auto 0;
 }
+.hero-copy .lede + .lede { margin-top: 14px; margin-bottom: 36px; }
 .accent-serif { font-style: normal; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
 .hero-note { margin-top: 18px; font-size: 0.86rem; color: var(--ink-mute); }
