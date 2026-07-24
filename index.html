@@ -20,6 +20,7 @@
   <!-- end Google Calendar Appointment Scheduling head -->
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
   <!-- ======================= NAV ======================= -->
   <header class="nav" id="top">
@@ -44,17 +45,17 @@
   <main>
     <!-- ======================= HERO ======================= -->
     <section class="hero">
-      <div class="hero-bg" role="presentation">
-        <div id="heroTechCanvas" class="hero-tech-canvas" role="presentation">
-          <svg id="heroMesh" aria-hidden="true" focusable="false"></svg>
-        </div>
+      <div class="glow-horizon" aria-hidden="true">
+        <div class="gh-arc gh-arc--rim"></div>
+        <div class="gh-arc gh-arc--outer"></div>
+        <div class="gh-arc gh-arc--inner"></div>
+        <div class="gh-arc gh-arc--core"></div>
       </div>
       <div class="hero-inner">
-        <div class="hero-copy reveal">
+        <div class="hero-copy">
           <p class="eyebrow">Web design &amp; development</p>
-          <h1>Your digital solutions<br /><span class="accent-serif">to your long-term problems.</span></h1>
-          <p class="lede">A website isn't just where people find your business. It's where they decide if you're the right choice.</p>
-          <p class="lede">The businesses that continue to grow aren't always the biggest. They're the ones that are easiest to find, easiest to trust, and easiest to choose.</p>
+          <h1><span class="h-line">Visibility creates opportunity.</span><br /><span class="h-line h-line--2">Credibility creates growth.</span><br /><span class="h-line h-line--3 accent-serif">Your website creates both.</span></h1>
+          <p class="lede">Built to earn trust. Designed to attract. Engineered to help your business grow.</p>
           <div class="hero-actions">
             <a href="#booking" class="btn btn-primary">Book a free 20-minute call</a>
             <a href="#pricing" class="btn btn-ghost">View packages</a>
@@ -66,14 +67,14 @@
 
     <!-- ======================= PROOF STRIP ======================= -->
     <section class="proof-strip" aria-label="Key facts">
-      <div class="proof-inner">
-        <div class="proof-item reveal"><strong>24/7</strong><span>Your website sells while you sleep</span></div>
+      <div class="proof-inner stagger">
+        <div class="proof-item reveal"><strong class="count">24/7</strong><span>Your website sells while you sleep</span></div>
         <div class="proof-divider" role="presentation"></div>
-        <div class="proof-item reveal"><strong>81%</strong><span>of customers research online before buying</span></div>
+        <div class="proof-item reveal"><strong class="count">81%</strong><span>of customers research online before buying</span></div>
         <div class="proof-divider" role="presentation"></div>
-        <div class="proof-item reveal"><strong>&lt; 3s</strong><span>to form a first impression of your business</span></div>
+        <div class="proof-item reveal"><strong class="count">&lt; 3s</strong><span>to form a first impression of your business</span></div>
         <div class="proof-divider" role="presentation"></div>
-        <div class="proof-item reveal"><strong>20 min</strong><span>is all a first call with us takes</span></div>
+        <div class="proof-item reveal"><strong class="count">20 min</strong><span>is all a first call with us takes</span></div>
       </div>
     </section>
 
@@ -138,11 +139,11 @@
           <p>The businesses that benefit the most from a website aren't necessarily the biggest — they're the ones that want to look bigger than they are. That's who we build for.</p>
           <p>Every project is designed around one goal: turning the attention you already earn into inquiries, bookings, and sales.</p>
         </div>
-        <ul class="about-values">
-          <li class="reveal"><h4>Professional</h4><p>Strategy first. Every page has a job, every section earns its place.</p></li>
-          <li class="reveal"><h4>Luxury &amp; minimal</h4><p>Refined typography, generous space, and nothing that doesn't serve you.</p></li>
-          <li class="reveal"><h4>Futuristic</h4><p>Modern, fast, mobile-perfect builds that stay ahead of your competitors.</p></li>
-          <li class="reveal"><h4>Premium</h4><p>Details matter. From first pixel to final handover, quality is the standard.</p></li>
+        <ul class="about-values stagger">
+          <li><div class="reveal reveal--pop"><h4>Professional</h4><p>Strategy first. Every page has a job, every section earns its place.</p></div></li>
+          <li><div class="reveal reveal--pop"><h4>Luxury &amp; minimal</h4><p>Refined typography, generous space, and nothing that doesn't serve you.</p></div></li>
+          <li><div class="reveal reveal--pop"><h4>Futuristic</h4><p>Modern, fast, mobile-perfect builds that stay ahead of your competitors.</p></div></li>
+          <li><div class="reveal reveal--pop"><h4>Premium</h4><p>Details matter. From first pixel to final handover, quality is the standard.</p></div></li>
         </ul>
       </div>
     </section>
@@ -204,8 +205,9 @@
         <h2>Clear prices. No surprises.</h2>
         <p class="section-sub">One-time investment. Your website works for you every hour after that.</p>
       </div>
-      <div class="sq-grid">
-        <article class="sq-card sq-card--amber reveal">
+      <div class="sq-grid stagger">
+        <div class="sq-card-wrap reveal reveal--pop">
+        <article class="sq-card sq-card--amber">
           <div class="sq-content">
             <span class="sq-badge">Single Page</span>
             <span class="sq-price">€388<br /><span class="sq-per">one-time</span></span>
@@ -218,7 +220,9 @@
             <ellipse cx="160.5" cy="265.5" rx="101.5" ry="43.5" />
           </svg>
         </article>
-        <article class="sq-card sq-card--orange reveal">
+        </div>
+        <div class="sq-card-wrap reveal reveal--pop">
+        <article class="sq-card sq-card--orange">
           <div class="sq-content">
             <span class="sq-badge">Business Site</span>
             <span class="sq-badge sq-badge--pop">★ Most popular</span>
@@ -232,7 +236,9 @@
             <rect class="sq-rect-b" x="155" width="153" height="153" rx="15" />
           </svg>
         </article>
-        <article class="sq-card sq-card--ink reveal">
+        </div>
+        <div class="sq-card-wrap reveal reveal--pop">
+        <article class="sq-card sq-card--ink">
           <div class="sq-content">
             <span class="sq-badge">Full Custom</span>
             <span class="sq-price">€999<br /><span class="sq-per">one-time</span></span>
@@ -246,6 +252,7 @@
             <path class="sq-chev-a" d="M148.893 40.6066C154.751 34.7487 164.249 34.7487 170.107 40.6066L267.393 137.893C273.251 143.751 273.251 153.249 267.393 159.106L218.75 207.75C186.027 240.473 132.973 240.473 100.25 207.75L51.6068 159.106C45.7489 153.249 45.7489 143.751 51.6068 137.893L148.893 40.6066Z" />
           </svg>
         </article>
+        </div>
       </div>
       <p class="pricing-foot reveal">Not sure which fits? <a href="#booking">Book a free 20-minute call</a> — we'll tell you honestly, even if the answer is the smallest package.</p>
     </section>
@@ -309,16 +316,16 @@
       </div>
 
       <!-- Social proof -->
-      <div class="testimonials">
-        <figure class="testimonial reveal">
+      <div class="testimonials stagger">
+        <figure class="testimonial reveal reveal--pop">
           <blockquote>"Before the website, people found us on Instagram and still called to ask basic questions. Now they arrive already knowing the menu and ready to book a table."</blockquote>
           <figcaption>Owner — <strong>Entrecot y Sobremesa Bistro</strong></figcaption>
         </figure>
-        <figure class="testimonial reveal">
+        <figure class="testimonial reveal reveal--pop">
           <blockquote>"Our photos and menu finally look as good online as the food tastes in person. People walk in already knowing what they want to order."</blockquote>
           <figcaption>Owner — <strong>Celestino's Coffee and Kitchen</strong></figcaption>
         </figure>
-        <figure class="testimonial reveal">
+        <figure class="testimonial reveal reveal--pop">
           <blockquote>"Patients used to call just to ask if we were legitimate. Now the website answers that before they even dial — bookings come in with far less hesitation."</blockquote>
           <figcaption>Owner — <strong>Gacutan Dental Clinic</strong></figcaption>
         </figure>
@@ -467,7 +474,6 @@
     </div>
   </footer>
 
-  <script src="hero-tech.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

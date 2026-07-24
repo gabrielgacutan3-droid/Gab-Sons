@@ -153,48 +153,70 @@ a { color: inherit; }
 .nav-toggle[aria-expanded="true"] span:first-child { transform: translateY(3.5px) rotate(45deg); }
 .nav-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
 
-/* ========================= HERO ========================= */
-.hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
-.hero-bg {
+/* ========================= HERO =========================
+   Glow Horizon: a luminous elliptical horizon sweeps down from
+   the top of a near-black canvas — white rim arc, warm brand
+   glow, black core. Vanilla port of the framer-motion
+   "glow-horizon" component (variant: top). */
+.hero {
+  position: relative; min-height: 100svh;
+  display: flex; align-items: center;
+  overflow: hidden;
+  background: #050507;
+}
+.glow-horizon {
+  /* Pinned to the viewport (not the hero box) so the horizon line
+     stays put no matter how tall the content below it grows. */
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 100svh;
+  isolation: isolate;
+  /* Static styles are the animation's END state; keyframes only
+     define the FROM state (fill: backwards). If animations ever
+     fail to run, the glow still renders fully formed. */
+  transform: translateY(-80%);
+  animation: ghEnter 2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+@keyframes ghEnter {
+  from { transform: translateY(-130%) scaleY(1.5); opacity: 0; filter: blur(15px); }
+}
+.gh-arc {
   position: absolute; inset: 0;
-  background: linear-gradient(135deg, #faf7f2 0%, #ffffff 50%, #faf7f2 100%);
+  border-radius: 100%;
+  --s: 1;
+  transform: scale(var(--s));
 }
-.hero-tech-canvas {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  z-index: 1;
+.gh-arc--rim {
+  --s: 1.32;
+  background: #ffffff;
+  box-shadow: 0 -4px 23px 0 rgba(255, 255, 255, 0.71);
 }
-#heroMesh {
-  display: block;
-  width: 100%;
-  height: 100%;
+.gh-arc--outer {
+  --s: 1.2;
+  background: #fb923c;
+  filter: blur(31px);
+  animation: ghArc 2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s backwards;
 }
-.mesh-line {
-  stroke: url(#meshGrad);
-  stroke-width: 1;
-  stroke-linecap: round;
+.gh-arc--inner {
+  --s: 1.24;
+  background: #ea580c;
+  filter: blur(21px);
+  animation: ghArc 2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
-.mesh-node {
-  fill: #f97316;
-  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.4));
+.gh-arc--core {
+  --s: 1.2;
+  background: #000000;
+  filter: blur(51px);
+  animation: ghArc 2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
-.mesh-stop-1 { stop-color: #f97316; stop-opacity: 0.5; }
-.mesh-stop-2 { stop-color: #ea580c; stop-opacity: 0.2; }
-.hero-bg::after {
-  content: '';
-  position: absolute; inset: 0;
-  z-index: 2;
-  background: linear-gradient(100deg,
-    rgba(250, 247, 242, 0.95) 0%,
-    rgba(250, 247, 242, 0.88) 40%,
-    rgba(250, 247, 242, 0.5) 75%,
-    rgba(250, 247, 242, 0.2) 100%);
+@keyframes ghArc {
+  from { transform: translateY(-40%) scale(var(--s)); }
 }
 .hero-inner {
   position: relative;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 140px var(--pad-x) 90px;
+  /* Top padding clears the glow crown (its rim rests ~36svh down). */
+  padding: clamp(280px, 44svh, 520px) var(--pad-x) 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -203,17 +225,69 @@ a { color: inherit; }
   width: 100%;
   z-index: 3;
 }
-.hero-copy { max-width: 680px; margin: 0 auto; }
+.hero-copy { max-width: 940px; margin: 0 auto; }
+.hero .eyebrow { color: #fbaa5b; }
+.hero h1 { color: #f7f1e8; font-size: clamp(2rem, 4.6vw, 3.5rem); line-height: 1.18; }
 .hero-copy .lede {
-  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
-  color: var(--ink-soft);
+  font-size: clamp(1.02rem, 1.5vw, 1.18rem);
+  color: rgba(240, 232, 220, 0.66);
   max-width: 34em;
-  margin: 26px auto 0;
+  margin: 26px auto 36px;
 }
-.hero-copy .lede + .lede { margin-top: 14px; margin-bottom: 36px; }
 .accent-serif { font-style: normal; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
-.hero-note { margin-top: 18px; font-size: 0.86rem; color: var(--ink-mute); }
+.hero .btn-ghost { color: #f7f1e8; border-color: rgba(247, 241, 232, 0.32); }
+.hero .btn-ghost:hover { border-color: #f7f1e8; background: rgba(255, 255, 255, 0.08); }
+.hero-note { margin-top: 18px; font-size: 0.86rem; color: rgba(240, 232, 220, 0.42); }
+
+/* Entrance choreography (mirrors the reference: words blur in,
+   supporting copy fades, dashboard rises from the fold). */
+.h-line {
+  display: inline-block;
+  opacity: 0;
+  animation: heroWord 1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
+}
+.h-line--2 { animation-delay: 0.5s; }
+.h-line--3 { animation-delay: 0.75s; }
+@keyframes heroWord {
+  from { opacity: 0; transform: translateY(26px); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+.hero .eyebrow, .hero-copy .lede, .hero .hero-actions, .hero .hero-note {
+  opacity: 0;
+  animation: heroFade 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero .eyebrow { animation-delay: 0.1s; }
+.hero-copy .lede { animation-delay: 0.85s; }
+.hero-copy .lede + .lede { animation-delay: 0.95s; }
+.hero .hero-actions { animation-delay: 1.1s; }
+.hero .hero-note { animation-delay: 1.25s; }
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Safety net: script.js adds .hero-done after the entrance choreography
+   window. In normal browsers the animations have already finished
+   (fill: forwards), so this is a no-op; in environments where CSS
+   animations never run, it guarantees the hero is visible. */
+.hero.hero-done .h-line,
+.hero.hero-done .eyebrow,
+.hero.hero-done .lede,
+.hero.hero-done .hero-actions,
+.hero.hero-done .hero-note {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Nav over the dark hero: light text until the page scrolls */
+.nav:not(.scrolled) .nav-name { color: #f7f1e8; }
+.nav:not(.scrolled) .nav-links:not(.open) a:not(.btn) { color: rgba(247, 241, 232, 0.72); }
+.nav:not(.scrolled) .nav-links:not(.open) a:not(.btn):hover { color: #fff; }
+.nav:not(.scrolled) .nav-toggle span { background: #f7f1e8; }
+.nav:not(.scrolled) .nav-links.open ~ .nav-toggle span { background: var(--ink); }
 
 
 /* ==================== PROOF STRIP ==================== */
@@ -391,6 +465,10 @@ a { color: inherit; }
   display: flex; flex-wrap: wrap; justify-content: center;
   gap: clamp(18px, 2.4vw, 28px);
 }
+/* Reveal animation lives on this wrapper, not .sq-card itself, so the
+   entrance transition never collides with the card's own hover-squish
+   transition (both would otherwise fight over the transform property). */
+.sq-card-wrap { flex-shrink: 0; max-width: 100%; }
 .sq-card {
   position: relative;
   width: 320px; max-width: 100%; min-height: 400px;
@@ -691,19 +769,63 @@ a { color: inherit; }
 .footer-copy { font-size: 0.85rem; color: rgba(207, 204, 198, 0.55); }
 
 /* ==================== REVEAL ANIMATIONS ==================== */
-.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s cubic-bezier(0.2, 0.65, 0.25, 1), transform 0.8s cubic-bezier(0.2, 0.65, 0.25, 1); }
+.reveal {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .reveal.in { opacity: 1; transform: none; }
+/* Card-style reveal: a touch of scale gives grids (pricing, testimonials,
+   about values) a subtle "pop" rather than a flat slide. */
+.reveal--pop { transform: translateY(24px) scale(0.94); }
+.reveal--pop.in { transform: none; }
+/* Staggered cascade: JS assigns each .reveal descendant an incremental
+   transition-delay so rows/grids animate in sequence, not all at once. */
+.stagger .reveal { transition-delay: var(--stagger-delay, 0ms); }
+
+/* Line-draw dividers either side of the pull quote, matching the
+   fade/slide of the quote itself with a short delay so the lines feel
+   like they draw in just after the words land. */
+.pull-quote::before, .pull-quote::after {
+  width: 0;
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+}
+.pull-quote.in::before, .pull-quote.in::after { width: 72px; }
+
+/* Scroll progress indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--grad);
+  z-index: 200;
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* Active nav link, kept in sync with the section in view */
+.nav-links a.active:not(.btn) {
+  color: var(--orange-deep);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .clock-colon { animation: none; }
+  .h-line, .hero .eyebrow, .hero-copy .lede, .hero .hero-actions, .hero .hero-note {
+    animation: none; opacity: 1; transform: none; filter: none;
+  }
+  /* Arcs' static CSS is already the finished state — just stop the entrance. */
+  .glow-horizon, .gh-arc { animation: none; }
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
 
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 1024px) {
-  .hero-inner { padding-top: 120px; }
+  .hero-inner { padding-top: clamp(260px, 42svh, 480px); }
   .editorial-inner { grid-template-columns: 1fr; max-width: 640px; }
   .about-grid { grid-template-columns: 1fr; }
   .product-row { grid-template-columns: 1fr; gap: 18px; }
@@ -748,4 +870,7 @@ a { color: inherit; }
   .field-row { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; text-align: center; justify-content: center; }
+  /* Widen the ellipse on narrow screens so the horizon stays a broad,
+     gentle arc instead of a steep sliver. */
+  .glow-horizon { width: 190%; left: -45%; }
 }

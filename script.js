@@ -25,9 +25,25 @@
     }
   });
 
+  /* ---------- Hero entrance safety net ---------- */
+  setTimeout(function () {
+    var hero = document.querySelector('.hero');
+    if (hero) hero.classList.add('hero-done');
+  }, 2600);
+
   /* ---------- Scroll reveal ---------- */
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var revealEls = document.querySelectorAll('.reveal');
+
+  // Staggered cascade: each .reveal inside a .stagger container gets an
+  // incremental delay so rows/grids animate in sequence rather than at once.
+  document.querySelectorAll('.stagger').forEach(function (group) {
+    var items = group.querySelectorAll('.reveal');
+    items.forEach(function (el, i) {
+      el.style.setProperty('--stagger-delay', Math.min(i, 5) * 90 + 'ms');
+    });
+  });
+
   if (reduceMotion || !('IntersectionObserver' in window)) {
     revealEls.forEach(function (el) { el.classList.add('in'); });
   } else {
@@ -57,6 +73,96 @@
         if (r.top < window.innerHeight - 40) el.classList.add('in');
       });
     }, { passive: true });
+  }
+
+  /* ---------- Scroll progress bar ---------- */
+  var progressBar = document.getElementById('scrollProgress');
+  var progressTicking = false;
+  function updateProgress() {
+    var doc = document.documentElement;
+    var scrollable = doc.scrollHeight - doc.clientHeight;
+    var pct = scrollable > 0 ? (doc.scrollTop / scrollable) * 100 : 0;
+    progressBar.style.width = pct + '%';
+    progressTicking = false;
+  }
+  if (progressBar) {
+    updateProgress();
+    window.addEventListener('scroll', function () {
+      if (!progressTicking) {
+        requestAnimationFrame(updateProgress);
+        progressTicking = true;
+      }
+    }, { passive: true });
+    window.addEventListener('resize', updateProgress);
+  }
+
+  /* ---------- Count-up stats ---------- */
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var counters = document.querySelectorAll('.count');
+    var countIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        countIo.unobserve(entry.target);
+        var el = entry.target;
+        var match = el.textContent.match(/^(\D*)(\d+)(\D*)$/);
+        if (!match) return; // not a simple prefix+number+suffix value (e.g. "24/7")
+        var prefix = match[1], target = parseInt(match[2], 10), suffix = match[3];
+        var start = performance.now();
+        var duration = 1100;
+        function tick(now) {
+          var p = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+          el.textContent = prefix + Math.round(eased * target) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (el) { countIo.observe(el); });
+  }
+
+  /* ---------- Hero parallax ---------- */
+  var heroBg = document.querySelector('.hero-bg');
+  var heroSection = document.querySelector('.hero');
+  if (heroBg && heroSection && !reduceMotion) {
+    var parallaxTicking = false;
+    function updateParallax() {
+      var r = heroSection.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) {
+        var shift = Math.max(-30, Math.min(30, window.scrollY * 0.12));
+        heroBg.style.transform = 'translateY(' + shift + 'px)';
+      }
+      parallaxTicking = false;
+    }
+    updateParallax();
+    window.addEventListener('scroll', function () {
+      if (!parallaxTicking) {
+        requestAnimationFrame(updateParallax);
+        parallaxTicking = true;
+      }
+    }, { passive: true });
+  }
+
+  /* ---------- Nav: highlight section in view ---------- */
+  var navAnchors = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
+  var sectionMap = navAnchors.reduce(function (map, a) {
+    var id = a.getAttribute('href').slice(1);
+    var section = document.getElementById(id);
+    if (section) map.push({ id: id, link: a, section: section });
+    return map;
+  }, []);
+  if (sectionMap.length && 'IntersectionObserver' in window) {
+    var navIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var match = sectionMap.filter(function (m) { return m.section === entry.target; })[0];
+        if (!match) return;
+        if (entry.isIntersecting) {
+          navAnchors.forEach(function (a) { a.classList.remove('active'); });
+          match.link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    sectionMap.forEach(function (m) { navIo.observe(m.section); });
   }
 
   /* ---------- Booking widget ---------- */
